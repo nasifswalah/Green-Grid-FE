@@ -1,0 +1,11 @@
+.already-account{
+    font-size: .7rem;
+}
+
+.already-account i{
+    color: blue;
+}
+
+.already-account i:hover{
+    text-decoration: underline;
+}
