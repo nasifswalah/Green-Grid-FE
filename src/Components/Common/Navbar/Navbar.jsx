@@ -1,9 +1,14 @@
 import React from 'react';
 import './Navbar.css';  
 import brandImg from '../../../Assets/running.png'
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 function Navbar() {
+  const {user} = useSelector(store=>store.user);
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
     <div className="container-fluid">
@@ -16,18 +21,18 @@ function Navbar() {
           <li className="nav-item">
             Home
           </li>
-          <li className="nav-item">
-            Features
-          </li>
+          { user.role === 1 && <li className="nav-item" onClick={()=>navigate('/newCourt')} >
+            Add new court
+          </li>}
         </ul>
         <div className="nav-item dropdown ">
           <span className="nav-link dropdown-toggle user-menu"  id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
+            {user.firstName}
           </span>
           <ul className="dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
-            <li><span className="dropdown-item" >Action</span></li>
-            <li><span className="dropdown-item" >Another action</span></li>
-            <li><span className="dropdown-item" >Something else here</span></li>
+            <li><span className="dropdown-item" >Profile</span></li>
+            {/* <li><span className="dropdown-item" >Another action</span></li> */}
+            <li><span className="dropdown-item" >Log out</span></li>
           </ul>
         </div>
       </div>

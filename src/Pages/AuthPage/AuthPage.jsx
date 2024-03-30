@@ -8,7 +8,7 @@ function AuthPage() {
     const [boxType, setBoxType] = useState('login');
 
   return (
-    <div className='container-fluid d-flex justify-content-center align-items-center vh-100 vw-100 '  >
+    <div className='container-fluid d-flex justify-content-center align-items-center vh-100 vw-100 authPage'  >
         
         <div className="row">
 
