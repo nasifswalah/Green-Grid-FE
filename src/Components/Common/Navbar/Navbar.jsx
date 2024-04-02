@@ -18,12 +18,15 @@ function Navbar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarText">
         <ul className="navbar-nav me-auto mb-lg-0">
-          <li className="nav-item">
+          <li className="nav-item" onClick={()=>navigate('/home')}>
             Home
           </li>
           { user.role === 1 && <li className="nav-item" onClick={()=>navigate('/newCourt')} >
             Add new court
           </li>}
+          <li className="nav-item" onClick={()=>navigate('/courts/courtslist')}>
+            Courts
+          </li>
         </ul>
         <div className="nav-item dropdown ">
           <span className="nav-link dropdown-toggle user-menu"  id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
