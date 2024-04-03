@@ -95,3 +95,19 @@
     font-size: 13px;
     font-weight: 500;
 }
+
+.available-slots{
+    border: 1px solid var(--brand-green);
+    border-radius: 5px;
+    color: var(--brand-dark);
+    background-color: rgba(59, 141, 59, 0.781);
+    cursor:pointer;
+}
+
+.unavailable-slots{
+    border: 1px solid rgba(170, 170, 170, 0.87);
+    border-radius: 5px;
+    color: rgba(104, 104, 104, 0.87);
+    background-color: rgb(209, 209, 209);
+    cursor:not-allowed;
+}

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import Cards from '../Cards/Cards'
 import AxiosInstance from '../../Config/apicall'
+import { ErrorToast } from '../../Plugins/Toast/Toast';
 
 function CourtListBody() {
 const [courtData, setCourtData] = useState([]);
 
   useEffect(()=>{
-    getAllCoutData()
+    getAllCourtData()
   },[])
 
-  const getAllCoutData = ()=>{
+  const getAllCourtData = ()=>{
     AxiosInstance.get('/users/getallcourtdata')
     .then((resp)=>{
       setCourtData(resp.data)
@@ -22,7 +23,7 @@ const [courtData, setCourtData] = useState([]);
   
   return (
     <div className='court-list-body flex-grow-1 d-flex flex-wrap justify-content-center overflow-y-auto gap-3 mt-3' >
-        {courtData.map((court)=><Cards court={court}/>)}
+        {courtData.map((court,index)=><Cards court={court} key={index}/>)}
     </div>
   )
 }
