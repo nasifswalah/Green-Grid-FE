@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux';
 import { showHideLoader } from '../../redux/generalSlice';
 
 function CourtDetailsBody() {
-    const {id} = useParams();
+    const { id } = useParams();
     const [openTimeSlot, setOpenTimeSlot] = useState(false);
     const [dateRange, setDateRange] = useState(
         {
@@ -41,102 +41,103 @@ function CourtDetailsBody() {
     const [filteredTimings, setFilteredTimings] = useState(TIMINGS);
     const [cost, setCost] = useState();
     const [bookingModal, setBookingModal] = useState(false);
-    const [bookingDate, setBookingDate] = useState(new Date().toISOString().substr(0,10))
-    const [slotData, setSlotData] = useState();
+    const [bookingDate, setBookingDate] = useState(new Date().toISOString().substr(0, 10))
+    const [slotData, setSlotData] = useState([]);
     const [bookedSlots, setBookedSlots] = useState([]);
     const dispatch = useDispatch();
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         getSingleCourtData()
-        
-    },[]);
 
-    useEffect(()=>{
+    }, []);
+
+    useEffect(() => {
         getSlotsData()
-    },[bookingDate]);
+    }, [bookingDate]);
 
-    const getSingleCourtData=()=>{
-        AxiosInstance.get('/users/getsinglecourtdata', {params:{courtId:id}})
-        .then((resp)=>{
-            setSingleCourtData(resp.data)
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
+    const getSingleCourtData = () => {
+        AxiosInstance.get('/users/getsinglecourtdata', { params: { courtId: id } })
+            .then((resp) => {
+                setSingleCourtData(resp.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
-    const getSlotsData=()=>{
+    const getSlotsData = () => {
         dispatch(showHideLoader(true));
-        AxiosInstance.get('/users/getslotsdata', {params:{courtId:id,date:bookingDate}})
-        .then((resp)=>{
-           setSlotData(resp.data)
-           dispatch(showHideLoader(false));
-        })
-        .catch((err)=>{
-            console.log(err);
-            ErrorToast("Something went wrong");
-            dispatch(showHideLoader(false));
-        })
+        AxiosInstance.get('/users/getslotsdata', { params: { courtId: id, date: bookingDate } })
+            .then((resp) => {
+                setSlotData(resp.data)
+                dispatch(showHideLoader(false));
+            })
+            .catch((err) => {
+                console.log(err);
+                ErrorToast("Something went wrong");
+                dispatch(showHideLoader(false));
+            })
     }
 
-    const selectSlot = (e,slots)=>{
+    const selectSlot = (e, slots) => {
         e.stopPropagation()
-        setSelectedSlots([...selectedSlots,slots])
-        const newTimes = filteredTimings.filter(element=>element.id!==slots.id)
+        setSelectedSlots([...selectedSlots, slots])
+        
+        const newTimes = filteredTimings.filter((element) => element.id !== slots.id)
         setFilteredTimings(newTimes)
         setOpenSlot(false)
     }
 
-    const handleDateSelection = ()=>{
+    const handleDateSelection = () => {
         setStartingDate(new Date(dateRange.startDate).toLocaleDateString())
         setEndingDate(new Date(dateRange.endDate).toLocaleDateString())
         setCalenderOpen(false)
     }
 
-    const cancelCalender = ()=>{
+    const cancelCalender = () => {
         setStartingDate("Start Date");
         setEndingDate("End Date");
         setCalenderOpen(false);
     }
 
-    const createCourtSchedules = ()=>{
+    const createCourtSchedules = () => {
         dispatch(showHideLoader(true));
         AxiosInstance({
-            url:'/admin/createschedules',
-            method:'post',
-            data:{
-                startDate:startingDate,
-                endDate:endingDate,
-                cost:cost,
-                selectedSlots:selectedSlots,
-                courtId:id
+            url: '/admin/createschedules',
+            method: 'post',
+            data: {
+                startDate: startingDate,
+                endDate: endingDate,
+                cost: cost,
+                selectedSlots: selectedSlots,
+                courtId: id
             }
         })
-        .then((res)=>{
-            successToast('Court created successfully')
-            setOpenTimeSlot(false);
-            dispatch(showHideLoader(false));
-        })
-        .catch((err)=>{
-            console.log(err);
-            ErrorToast("Court creation failed")
-            dispatch(showHideLoader(false));
-        })
+            .then((res) => {
+                successToast('Court created successfully')
+                setOpenTimeSlot(false);
+                dispatch(showHideLoader(false));
+            })
+            .catch((err) => {
+                console.log(err);
+                ErrorToast("Court creation failed")
+                dispatch(showHideLoader(false));
+            })
     }
 
-    const handleSlotSelection = (slot)=>{
-        if(bookedSlots.find((ele)=>ele._id===slot._id)) {
-            const temp= bookedSlots.filter(ele=>ele._id!==slot._id)
+    const handleSlotSelection = (slot) => {
+        if (bookedSlots.find((ele)=>ele._id === slot._id)) {
+            const temp = bookedSlots.filter((ele) => ele._id !== slot._id)
             setBookedSlots(temp)
-        }else {
-            setBookedSlots(...bookedSlots,slot)
+        } else {
+            setBookedSlots([...bookedSlots, slot])
         }
     }
 
-    const initiateBooking = ()=>{
+    const initiateBooking = () => {
 
     }
- 
+
     return (
         <div className='details-page' >
             <div className="details-image-box">
@@ -147,7 +148,7 @@ function CourtDetailsBody() {
                         <p>{singleCourtData.location}</p>
                     </div>
                     <div className="align-self-end d-flex gap-3">
-                        <button><img src={bookSlotIcon} alt="" height={'20px'}  onClick={()=>setBookingModal(true)} /></button>
+                        <button><img src={bookSlotIcon} alt="" height={'20px'} onClick={() => setBookingModal(true)} /></button>
                         <button><img src={editIcon} alt="" height={'20px'} /></button>
                         <button><img src={imageIcon} alt="" height={'20px'} /></button>
                         <button><img src={slotIcon} alt="" height={'20px'} onClick={() => { setOpenTimeSlot(true) }} /></button>
@@ -162,19 +163,19 @@ function CourtDetailsBody() {
             {openTimeSlot && <Modal heading={'Add new time slot data'} closeModal={() => { setOpenTimeSlot(false) }} >
                 <div className="timeslot-select-modal p-3">
                     <label htmlFor="">Select Date Range
-                        <img src={calenderIcon} alt="" height={'20px'} onClick={()=>{setCalenderOpen(true)}} />
+                        <img src={calenderIcon} alt="" height={'20px'} onClick={() => { setCalenderOpen(true) }} />
                     </label>
                     <div className='d-flex align-items-center gap-1 mt-2 '>
                         <div className='timeslot-date flex-grow-1 border border-1  rounded p-2 text-center '>
                             {startingDate}
                         </div>
-                        <img src={forwardIcon} alt="" height={'20px'}/>
+                        <img src={forwardIcon} alt="" height={'20px'} />
                         <div className='timeslot-date flex-grow-1 border border-1 rounded p-2 text-center'>
                             {endingDate}
                         </div>
                     </div>
-                    { calenderOpen && <div className='calender-box'>
-                    <img src={closeIcon} alt="" height={'20px'} className='modal-close-icon' onClick={()=>setCalenderOpen(false)} />
+                    {calenderOpen && <div className='calender-box'>
+                        <img src={closeIcon} alt="" height={'20px'} className='modal-close-icon' onClick={() => setCalenderOpen(false)} />
                         <DateRange
                             editableDateInputs={true}
                             onChange={item => setDateRange(item.selection)}
@@ -187,42 +188,57 @@ function CourtDetailsBody() {
                         </div>
                     </div>}
                     <div className="mt-3">
-                        <CustomInput name={'cost'} label={'Cost'} value={cost} onchange={(e)=>setCost(e.target.value)} />
+                        <CustomInput name={'cost'} label={'Cost'} value={cost} onchange={(e) => setCost(e.target.value)} />
                     </div>
-                    <div className='range-label position-relative mt-3 ' onClick={()=>setOpenSlot(true)}>
+                    <div className='range-label position-relative mt-3 ' onClick={() => setOpenSlot(true)}>
                         Select slot
-                        {openSlot && <ul className='slot-list'> 
-                        {filteredTimings.map((slot)=><li onClick={(e)=>selectSlot(e,slot)} >{slot.name}</li>)}
-                        </ul>}
+                        {openSlot && 
+                         (<ul className='slot-list'>
+                            {filteredTimings.map((slot) => (<li onClick={(e) => selectSlot(e, slot)} >{slot.name}</li>))}
+                        </ul>)}
                     </div>
                     <div className='d-flex gap-2 mt-2 py-2 flex-wrap justify-content-center '>
-                        {selectedSlots.map(slot=><span className='border border-2 rounded px-2 py-1 '>{slot.name}</span> )}
+                        {selectedSlots.map(slot => (<span className='border border-2 rounded px-2 py-1 '>{slot.name}</span>))}
                     </div>
                     <div className='d-flex justify-content-end gap-3 p-2 mt-2'>
-                            <button className='common-button bg-black text-white'>Cancel</button>
-                            <button className='common-button' onClick={createCourtSchedules}>Create</button>
-                        </div>
+                        <button className='common-button bg-black text-white'>Cancel</button>
+                        <button className='common-button' onClick={createCourtSchedules}>Create</button>
+                    </div>
                 </div>
             </Modal>}
 
-            {bookingModal && <Modal heading={'Book your slot'} closeModal={()=>{setBookingModal(false)}} >
+            {bookingModal && <Modal heading={'Book your slot'} closeModal={() => { setBookingModal(false) }} >
                 <div className="timeslot-select-modal p-3 h-100 d-flex flex-column ">
                     <label htmlFor="" className='mt-2'>Start Date</label>
-                    <input 
-                        type="date" 
+                    <input
+                        type="date"
                         className='p-1 px-2 mx-2 border rounded-1'
                         value={bookingDate}
-                        min={new Date().toISOString().substr(0,10)}
-                        onChange={(e)=>{setBookingDate(e.target.value)}}
-                     />
-                     <label htmlFor="">Available Slots</label>
-                     <div className='d-flex flex-wrap gap-1 mt-1'>
-                        {slotData.map((slot)=><span className={`${bookedSlots.find(ele=>ele._id===slot._id)? 'bg-bg-info-subtle ' : slot.slot.bookedBy? 'unavailable-slots' : 'available-slots'} px-2 py-1 mt-2`} onClick={()=>handleSlotSelection(slot)}>{slot.slot.name}</span>)}
-                     </div>
-                     <div className='d-flex justify-content-end gap-3 p-2 mt-2'>
-                            <button className='common-button bg-black text-white'>Cancel</button>
-                            <button className='common-button' onClick={initiateBooking}>Book</button>
-                        </div>
+                        min={new Date().toISOString().substr(0, 10)}
+                        onChange={(e) => { setBookingDate(e.target.value) }}
+                    />
+                    <label htmlFor="">Available Slots</label>
+                    <div className='d-flex flex-wrap gap-1 mt-1'>
+                        {
+                            slotData.map((slot) =>
+                                <span 
+                                className={`${
+                                    bookedSlots.find((ele)=>ele._id===slot._id) ?
+                                     'bg-info-subtle ' : 
+                                     slot.bookedBy ? 
+                                     'unavailable-slots' :
+                                        'available-slots'} px-2 py-1 mt-2`
+                                    } 
+                                    onClick={()=>handleSlotSelection(slot)}>
+                                        {slot.slot.name}
+                                </span>
+                                )
+                        }
+                    </div>
+                    <div className='d-flex justify-content-end gap-3 p-2 mt-2'>
+                        <button className='common-button bg-black text-white'>Cancel</button>
+                        <button className='common-button' onClick={initiateBooking}>Book</button>
+                    </div>
                 </div>
             </Modal>}
         </div>
