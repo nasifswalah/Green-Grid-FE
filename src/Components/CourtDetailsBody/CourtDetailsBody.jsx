@@ -82,7 +82,7 @@ function CourtDetailsBody() {
     const selectSlot = (e, slots) => {
         e.stopPropagation()
         setSelectedSlots([...selectedSlots, slots])
-        
+
         const newTimes = filteredTimings.filter((element) => element.id !== slots.id)
         setFilteredTimings(newTimes)
         setOpenSlot(false)
@@ -126,16 +126,97 @@ function CourtDetailsBody() {
     }
 
     const handleSlotSelection = (slot) => {
-        if (bookedSlots.find((ele)=>ele._id === slot._id)) {
+        if (bookedSlots.find((ele) => ele._id === slot._id)) {
             const temp = bookedSlots.filter((ele) => ele._id !== slot._id)
             setBookedSlots(temp)
         } else {
             setBookedSlots([...bookedSlots, slot])
         }
+    };
+
+    async function initiateBooking() {
+        try {
+
+            const res = await loadScript(
+                "https://checkout.razorpay.com/v1/checkout.js"
+            );
+
+            if (!res) {
+                ErrorToast("Razorpay SDK failed to load. Are you online?");
+                return;
+            }
+
+            // creating a new order
+            const slotIds = bookedSlots.map((ele) => { return ele._id })
+            const result = await AxiosInstance.post("/payments/orders", { courtId: id, slotIds: slotIds });
+
+            if (!result) {
+                ErrorToast("Server error. Are you online?");
+                return;
+            }
+
+            // Getting the order details back
+            const { amount, id: order_id, currency, receipt } = result.data;
+
+            const options = {
+                key: process.env.REACT_APP_RP_KEY_ID,
+                amount: amount.toString(),
+                currency: currency,
+                name: "Green Grid Sports.",
+                description: "Test Transaction",
+                image: null,
+                order_id: order_id,
+                handler: async function (response) {
+                    const data = {
+                        orderCreationId: order_id,
+                        razorpayPaymentId: response.razorpay_payment_id,
+                        razorpayOrderId: response.razorpay_order_id,
+                        razorpaySignature: response.razorpay_signature,
+                        receipt,
+                        slotIds,
+                        courtId: id,
+                        date: bookingDate,
+                    };
+
+                    const result = await AxiosInstance.post("/payments/verify", data);
+                    setBookingModal(false);
+                    getSlotsData();
+
+                    successToast(result.data.msg);
+                },
+                prefill: {
+                    name: "Soumya Dey",
+                    email: "SoumyaDey@example.com",
+                    contact: "9999999999",
+                },
+                notes: {
+                    address: "Soumya Dey Corporate Office",
+                },
+                theme: {
+                    color: "#61dafb",
+                },
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
-    const initiateBooking = () => {
-
+    function loadScript(src) {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+            document.body.appendChild(script);
+        });
     }
 
     return (
@@ -192,10 +273,10 @@ function CourtDetailsBody() {
                     </div>
                     <div className='range-label position-relative mt-3 ' onClick={() => setOpenSlot(true)}>
                         Select slot
-                        {openSlot && 
-                         (<ul className='slot-list'>
-                            {filteredTimings.map((slot) => (<li onClick={(e) => selectSlot(e, slot)} >{slot.name}</li>))}
-                        </ul>)}
+                        {openSlot &&
+                            (<ul className='slot-list'>
+                                {filteredTimings.map((slot) => (<li onClick={(e) => selectSlot(e, slot)} >{slot.name}</li>))}
+                            </ul>)}
                     </div>
                     <div className='d-flex gap-2 mt-2 py-2 flex-wrap justify-content-center '>
                         {selectedSlots.map(slot => (<span className='border border-2 rounded px-2 py-1 '>{slot.name}</span>))}
@@ -221,18 +302,18 @@ function CourtDetailsBody() {
                     <div className='d-flex flex-wrap gap-1 mt-1'>
                         {
                             slotData.map((slot) =>
-                                <span 
-                                className={`${
-                                    bookedSlots.find((ele)=>ele._id===slot._id) ?
-                                     'bg-info-subtle ' : 
-                                     slot.bookedBy ? 
-                                     'unavailable-slots' :
-                                        'available-slots'} px-2 py-1 mt-2`
-                                    } 
-                                    onClick={()=>handleSlotSelection(slot)}>
-                                        {slot.slot.name}
+                                <span
+                                    className={`${bookedSlots.find((ele) => ele._id === slot._id) 
+                                        ? 'bg-info-subtle ' 
+                                        : slot.bookedBy 
+                                        ? 'unavailable-slots' 
+                                        : 'available-slots'} 
+                                        px-2 py-1 mt-2`
+                                    }
+                                    onClick={() => !slot.bookedBy && handleSlotSelection(slot)}>
+                                    {slot.slot.name}
                                 </span>
-                                )
+                            )
                         }
                     </div>
                     <div className='d-flex justify-content-end gap-3 p-2 mt-2'>
