@@ -34,7 +34,6 @@ function Navbar() {
           </span>
           <ul className="dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdownMenuLink">
             <li><span className="dropdown-item" >Profile</span></li>
-            {/* <li><span className="dropdown-item" >Another action</span></li> */}
             <li><span className="dropdown-item" >Log out</span></li>
           </ul>
         </div>

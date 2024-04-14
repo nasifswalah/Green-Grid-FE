@@ -24,7 +24,6 @@
     inset: auto auto 30px 30px;
     margin: 0;
     transition: inset 0.3s 0.3s ease-out;
-    font-family: 'Roboto Condensed', sans-serif;
     font-weight: normal;
     text-transform: uppercase;
 }

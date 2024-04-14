@@ -67,7 +67,6 @@ function NewCourtBox() {
           <h3>Add New Court</h3>
           <span className='d-flex gap-3'>
             <button className='common-button bg-black text-white'>
-              {" "}
               Cancel
             </button>
             <div className="common-button" onClick={handleCreateCourt}>Create</div>

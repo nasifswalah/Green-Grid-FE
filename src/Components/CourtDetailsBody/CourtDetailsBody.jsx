@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './CourtDetailsBody.css';
-import courtImg from '@assets/throwing-basketball.jpg'
 import editIcon from '@assets/editIcon.svg';
 import imageIcon from '@assets/imageIcon.svg';
 import slotIcon from '@assets/addIcon3.svg';
@@ -19,11 +18,12 @@ import { useParams } from 'react-router-dom';
 import AxiosInstance from '../../Config/apicall';
 import { TIMINGS } from '../../Constants/timings';
 import { ErrorToast, successToast } from '../../Plugins/Toast/Toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showHideLoader } from '../../redux/generalSlice';
 
 function CourtDetailsBody() {
     const { id } = useParams();
+    const {user} = useSelector(store=>store.user);
     const [openTimeSlot, setOpenTimeSlot] = useState(false);
     const [dateRange, setDateRange] = useState(
         {
@@ -222,7 +222,7 @@ function CourtDetailsBody() {
     return (
         <div className='details-page' >
             <div className="details-image-box">
-                <img src={courtImg} alt="" className="details-main-image" />
+                <img src={`${process.env.REACT_APP_BASE_URL}/assets/${singleCourtData?.courtPics?.[0]?.name}`} alt="" className="details-main-image" />
                 <div className="details-image-content d-flex justify-content-between p-4">
                     <div className="d-flex flex-column justify-content-center text-white" >
                         <h2>{singleCourtData.name}</h2>
@@ -232,7 +232,7 @@ function CourtDetailsBody() {
                         <button><img src={bookSlotIcon} alt="" height={'20px'} onClick={() => setBookingModal(true)} /></button>
                         <button><img src={editIcon} alt="" height={'20px'} /></button>
                         <button><img src={imageIcon} alt="" height={'20px'} /></button>
-                        <button><img src={slotIcon} alt="" height={'20px'} onClick={() => { setOpenTimeSlot(true) }} /></button>
+                        { user.role === 1 && <button><img src={slotIcon} alt="" height={'20px'} onClick={() => { setOpenTimeSlot(true) }} /></button>}
                     </div>
                 </div>
             </div>

@@ -1,8 +1,8 @@
 import React from 'react'
 import './Blocks.css'
-import Search from '@assets/search-globe-svgrepo-com.svg';
-import Book from '@assets/appointments-svgrepo-com.svg';
-import Football from '@assets/sports-soccer-svgrepo-com.svg';
+import Search from '@assets/search.svg';
+import Book from '@assets/book.svg';
+import Explore from '@assets/explore.svg';
 
 function Blocks() {
   return (
@@ -11,19 +11,19 @@ function Blocks() {
         <div className="d-flex flex-column  align-items-center text-break p-3 text-center">
             <img src={Search} alt="" />
             <h3>Search</h3>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis animi labore et dolore quaerat vel. </p>
+            <p>Navigate the field of playing turfs effortlessly, ensuring you find the perfect spot for your next game or practice session with ease</p>
         </div>
 
         <div className="d-flex flex-column  align-items-center text-break p-3 text-center">
             <img src={Book} alt="" />
             <h3>Book</h3>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis animi labore et dolore quaerat vel. </p>
+            <p>Reserve your playing turf hassle-free, ensuring you secure the perfect spot for your next game or practice session effortlessly</p>
         </div>
 
         <div className="d-flex flex-column  align-items-center text-break p-3 text-center">
-            <img src={Football} alt="" />
-            <h3>Football</h3>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis animi labore et dolore quaerat vel. </p>
+            <img src={Explore} alt="" />
+            <h3>Explore</h3>
+            <p>Uncover a world of playing turfs, discovering the perfect spot for your next game or practice session with just a tap</p>
         </div>
     </div>
 

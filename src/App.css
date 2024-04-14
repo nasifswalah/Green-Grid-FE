@@ -1,9 +1,10 @@
 .common-button{
-    padding: .3rem .7rem;
+    padding: .5rem .7rem;
     background-color: var(--brand-light);
     color: var(--brand-dark);
     border: 1px thin var(--brand-green);
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .common-button:hover{

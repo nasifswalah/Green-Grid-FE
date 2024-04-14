@@ -1,7 +1,8 @@
 import React from 'react'
 import './Carousal.css'
-import IMG from '@assets/duffy-brook-IwDTKKFmWAc-unsplashu.jpg'
-import IMG2 from '@assets/Virat Kohli wallpaper 📍 (Ind vs SL ).jpg'
+import SlideIMG1 from '@assets/pexels-pixabay-46798.jpg'
+import slideIMG2 from '@assets/Cricket.jpg'
+import slideIMG3 from '@assets/i1080x475.jpg'
 
 function Carousal() {
     return (
@@ -13,24 +14,24 @@ function Carousal() {
             </div>
             <div className="carousel-inner">
                 <div className="carousel-item active">
-                    <img src={IMG} className="d-block w-100" alt="..." />
+                    <img src={SlideIMG1} className="d-block w-100" alt="..." />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>First slide label</h5>
-                        <p>Discover joy in every jumb, laughter in every swing</p>
+                        <h5>Pitch Perfect Moments</h5>
+                        <p>Find exhilaration in every kick, and camaraderie in every pass, just like on the field</p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src={IMG2} className="d-block w-100" alt="..." />
+                    <img src={slideIMG2} className="d-block w-100" alt="..." />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>Second slide label</h5>
-                        <p>Play is the key to a happy heart. Dive into the fun!</p>
+                        <h5>Stumps and Stories</h5>
+                        <p>Among the stumps, whispers of cricketing sagas enchant the air</p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src={IMG} className="d-block w-100" alt="..." />
+                    <img src={slideIMG3} className="d-block w-100" alt="..." />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>Third slide label</h5>
-                        <p>Little moments, big memories - let the playground adventures begin!</p>
+                        <h5>Rim Rendezvous</h5>
+                        <p>Between the court and the rim lies the journey of every basketball dream</p>
                     </div>
                 </div>
             </div>
