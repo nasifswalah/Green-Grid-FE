@@ -49,7 +49,7 @@ function CourtDetailsBody() {
     useEffect(() => {
         getSingleCourtData()
 
-    }, []);
+    }, [getSingleCourtData]);
 
     useEffect(() => {
         getSlotsData()
